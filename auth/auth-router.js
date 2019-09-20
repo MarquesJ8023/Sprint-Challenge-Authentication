@@ -23,8 +23,6 @@ router.post('/register', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-  // implement login
-
   let { username, password } = req.body;
 
   Users.findBy({ username })
@@ -41,5 +39,17 @@ router.post('/login', (req, res) => {
       res.status(500).json(error);
     });
 });
+
+function generateToken(user) {
+  const payload = {
+    username: user.username
+  };
+
+  const options = {
+    expiresIn: '1d',
+  };
+
+  return jwt.sign(payload, secrets.jwtSecret, options);
+}
 
 module.exports = router;
